@@ -1,17 +1,10 @@
 {
-  "name": "Class 8 Smart Study",
-  "short_name": "Class 8 Study",
-  "start_url": "./",
-  "display": "standalone",
-  "background_color": "#f4f7fb",
-  "theme_color": "#3157d5",
-  "description": "Class 8 study app with quizzes, notes, timer and progress.",
-  "icons": [
-    {
-      "src": "icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
-  ]
+  "name":"StudyNova X — Class 8",
+  "short_name":"StudyNova X",
+  "start_url":"./",
+  "display":"standalone",
+  "background_color":"#0b1220",
+  "theme_color":"#101827",
+  "description":"A free Class 8 study PWA with randomized quizzes, mock exams, flashcards, notes, planning and progress.",
+  "icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
 }
