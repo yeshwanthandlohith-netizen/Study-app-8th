@@ -1,0 +1,17 @@
+{
+  "name": "Class 8 Smart Study",
+  "short_name": "Class 8 Study",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f4f7fb",
+  "theme_color": "#3157d5",
+  "description": "Class 8 study app with quizzes, notes, timer and progress.",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

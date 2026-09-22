@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#3157d5">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg">
+<title>Class 8 Smart Study</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f4f7fb;color:#172033}
+header{background:#3157d5;color:#fff;padding:22px 18px;border-radius:0 0 25px 25px}header h1{margin:0;font-size:26px}header p{margin:6px 0}
+main{max-width:720px;margin:auto;padding:16px}.card{background:#fff;border-radius:18px;padding:18px;margin:13px 0;box-shadow:0 3px 14px #0001}
+button{border:0;border-radius:12px;padding:12px 15px;background:#3157d5;color:#fff;font-size:15px;margin:4px;cursor:pointer}button.secondary{background:#e9edff;color:#3157d5}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.subject{padding:15px;border:1px solid #e5e7eb;border-radius:14px}.chapter{display:flex;justify-content:space-between;align-items:center;border-top:1px solid #eee;padding:10px 0;gap:8px}
+.option{display:block;width:100%;text-align:left;background:#eef2ff;color:#172033}.hidden{display:none}.score{text-align:center;font-size:44px;font-weight:bold;color:#3157d5}
+#timer{text-align:center;font-size:48px;font-weight:bold}textarea,input{width:100%;padding:12px;border:1px solid #d5d9e2;border-radius:12px;font-size:16px}
+.note{border:1px solid #e4e7ec;border-radius:14px;padding:12px;margin:9px 0}.small{font-size:13px;color:#667085}.badge{display:inline-block;background:#eef2ff;color:#3157d5;padding:6px 10px;border-radius:20px;font-size:13px}
+.nav{position:sticky;bottom:0;background:#fff;border-top:1px solid #ddd;padding:7px;display:grid;grid-template-columns:repeat(4,1fr);gap:3px}.nav button{margin:0;padding:10px 4px;font-size:12px}
+@media(max-width:430px){.grid{grid-template-columns:1fr}.chapter{align-items:flex-start;flex-direction:column}}
+</style>
+</head>
+<body>
+<header><h1>📚 Class 8 Smart Study</h1><p>Learn • Practice • Track • Improve</p></header>
+<main>
+<section id="home"><div class="card"><h2>Welcome! 👋</h2><p>Your Class 8 study dashboard.</p><div class="grid">
+<button onclick="show('subjects')">📚 Subjects</button><button onclick="quickQuiz()">🎲 Quick Quiz</button><button onclick="show('timerPage')">⏱️ Timer</button><button onclick="show('progressPage')">📊 Progress</button><button onclick="show('notesPage')">📝 Saved Notes</button><button onclick="show('toolsPage')">🧰 Study Tools</button>
+</div></div><div class="card"><h2>🎯 Daily Challenge</h2><p id="challenge">Complete a quiz today.</p><button onclick="quickQuiz()">Start Challenge</button></div></section>
+
+<section id="subjects" class="hidden"><div class="card"><h2>📚 Subjects</h2><div id="subjectList" class="grid"></div></div></section>
+<section id="chapters" class="hidden"><div class="card"><h2 id="chapterTitle"></h2><p class="badge" id="chapterCount"></p><div id="chapterList"></div></div></section>
+
+<section id="quiz" class="hidden"><div class="card"><span class="badge" id="quizTitle"></span><h2 id="question"></h2><div id="options"></div><p id="progressText"></p></div></section>
+<section id="result" class="hidden"><div class="card"><h2>🎉 Quiz Complete!</h2><div class="score" id="score"></div><p id="resultText" style="text-align:center"></p><button onclick="startQuiz(currentSubject,currentChapter)">🔄 Retry</button><button class="secondary" onclick="showChapters(currentSubject)">📚 Chapters</button></div></section>
+
+<section id="timerPage" class="hidden"><div class="card"><h2>⏱️ Study Timer</h2><div id="timer">25:00</div><div style="text-align:center"><button onclick="startTimer()">▶ Start</button><button class="secondary" onclick="pauseTimer()">⏸ Pause</button><button class="secondary" onclick="resetTimer()">↻ Reset</button></div></div></section>
+
+<section id="progressPage" class="hidden"><div class="card"><h2>📊 Progress</h2><p>Quizzes: <b id="completed">0</b></p><p>Questions: <b id="answered">0</b></p><p>Correct: <b id="correct">0</b></p><p>Accuracy: <b id="accuracy">0%</b></p><p>Study time: <b id="studyTime">0 min</b></p><p>Streak: <b id="streak">0 days</b></p></div></section>
+
+<section id="notesPage" class="hidden"><div class="card"><h2>📝 Saved Notes</h2><input id="noteTitle" placeholder="Note title"><br><br><textarea id="noteText" placeholder="Write your notes..."></textarea><br><button onclick="saveNote()">💾 Save Note</button><div id="notesList"></div></div></section>
+
+<section id="toolsPage" class="hidden"><div class="card"><h2>🧰 Study Tools</h2><button onclick="show('formulaPage')">📐 Maths Formula Book</button><button onclick="show('wrongPage')">❌ Wrong Answers</button><button onclick="toggleDark()">🌙 Dark Mode</button><button onclick="installApp()">📲 Install App</button><p class="small">If Chrome doesn't show installation yet, the app must be opened from a secure web address (HTTPS), not directly from a downloaded HTML file.</p></div></section>
+<section id="formulaPage" class="hidden"><div class="card"><h2>📐 Maths Formula Book</h2><p><b>Percentage:</b> Percentage = (Part/Whole) × 100</p><p><b>Profit:</b> Profit = SP − CP</p><p><b>Loss:</b> Loss = CP − SP</p><p><b>Simple Interest:</b> SI = (P × R × T)/100</p><p><b>Area of rectangle:</b> length × breadth</p><p><b>Area of square:</b> side²</p><p><b>Average:</b> Sum of observations ÷ Number of observations</p></div></section>
+<section id="wrongPage" class="hidden"><div class="card"><h2>❌ Wrong Answers</h2><div id="wrongList"></div><button class="secondary" onclick="clearWrong()">Clear Wrong Answers</button></div></section>
+</main>
+
+<nav class="nav">
+<button onclick="show('home')">🏠 Home</button><button onclick="show('subjects')">📚 Subjects</button><button onclick="show('notesPage')">📝 Notes</button><button onclick="show('progressPage')">📊 Progress</button>
+</nav>
+
+<script>
+const data={
+"Mathematics":{
+"Rational Numbers":[["Which is rational?",["√2","3/5","π","√3"],1],["1/2 + 1/4 = ?",["1/4","2/4","3/4","4/4"],2],["Additive inverse of 7/9?",["7/9","-7/9","9/7","-9/7"],1]],
+"Linear Equations in One Variable":[["x+5=12. x=?",["5","6","7","8"],2],["3x=18. x=?",["3","6","9","12"],1],["2x+3=11. x=?",["3","4","5","6"],1]],
+"Construction of Quadrilaterals":[["A quadrilateral has how many sides?",["3","4","5","6"],1],["A rectangle has how many right angles?",["1","2","3","4"],3]],
+"Exponents and Powers":[["2³ = ?",["6","8","9","12"],1],["A non-zero number to power 0 is:",["0","1","10","the number"],1],["10⁴ = ?",["10×4","10+4","10×10×10×10","4×4×4×4"],2]],
+"Comparing Quantities":[["25% as a fraction is:",["1/2","1/4","1/5","3/4"],1],["10% of 200 is:",["10","20","30","40"],1],["Ratio 2:3 has total parts:",["2","3","5","6"],2]],
+"Square Roots and Cube Roots":[["√49 = ?",["6","7","8","9"],1],["∛27 = ?",["2","3","4","5"],1]],
+"Data Handling":[["The average is called:",["Range","Mean","Mode","Median"],1],["Most frequent value is:",["Mean","Mode","Range","Sum"],1]]
+},
+"Physics":{
+"Force and Pressure":[["A push or pull is called:",["Energy","Force","Pressure","Work"],1],["Pressure = ?",["Force/Area","Area/Force","Force×Area","Force+Area"],0]],
+"Friction":[["Friction acts between:",["two surfaces in contact","only liquids","only gases","empty space"],0],["Oil is used to:",["increase friction","reduce friction","stop motion","increase weight"],1]],
+"Sound":[["Sound is produced by:",["vibrations","light","heat only","gravity"],0],["Unit of frequency:",["Newton","Hertz","Pascal","Joule"],1]],
+"Light":[["A mirror mainly:",["absorbs light","reflects light","creates light","stops light"],1],["Plane mirror image is:",["real","virtual","always upside down","always larger"],1]],
+"Chemical Effects of Electric Current":[["Electroplating uses:",["electric current","sound","friction","gravity"],0]]
+},
+"Biology":{
+"Cell - Structure and Functions":[["Basic unit of life:",["atom","cell","organ","tissue"],1],["Control centre of a cell:",["cell wall","nucleus","vacuole","cytoplasm"],1],["Plant cells have a:",["cell wall","only nucleus","no membrane","no cytoplasm"],0]],
+"Microorganisms":[["Yeast is a:",["fungus","virus","alga","protozoan"],0],["Curd formation is helped by:",["Lactobacillus","Amoeba","Plasmodium","virus"],0]],
+"Reproduction in Animals":[["Fusion of male and female gametes:",["fertilisation","germination","respiration","digestion"],0]],
+"Conservation of Plants and Animals":[["Cutting forests on a large scale:",["deforestation","afforestation","irrigation","cultivation"],0],["Planting trees:",["deforestation","afforestation","pollution","erosion"],1]],
+"Human Body":[["Organ that pumps blood:",["lungs","heart","kidney","stomach"],1],["Brain is part of the:",["digestive","nervous","skeletal","respiratory"],1]]
+},
+"Social Studies":{
+"Resources":[["Which is natural?",["plastic","water","computer","car"],1],["Coal is:",["renewable","non-renewable","unlimited","human"],1]],
+"Indian Constitution":[["Supreme law of India:",["Constitution","school rule","local rule","police order"],0],["India is a:",["monarchy","democracy","colony","dictatorship"],1]],
+"Parliament and Government":[["Parliament makes:",["laws","weather","rivers","mountains"],0]],
+"Industries":[["Cotton is used by the:",["textile industry","iron industry","cement industry","ship industry"],0]],
+"Geography and Maps":[["A compass helps find:",["directions","temperature","rainfall","population"],0]]
+},
+"English":{
+"Grammar":[["Past tense of go:",["goed","gone","went","going"],2],["Opposite of ancient:",["old","modern","past","early"],1],["Plural of child:",["childs","children","childes","child"],1]],
+"Nouns":[["Which is a noun? 'The boy runs.'",["boy","runs","the","fast"],0],["Honesty is an:",["abstract noun","verb","adjective","pronoun"],0]],
+"Vocabulary":[["Same meaning word:",["synonym","antonym","verb","article"],0],["Opposite meaning word:",["synonym","antonym","noun","adverb"],1]]
+}
+};
+
+let currentSubject="",currentChapter="",quiz=[],qi=0,score=0;
+let stats=JSON.parse(localStorage.getItem("c8stats")||'{"completed":0,"answered":0,"correct":0,"study":0,"last":"","streak":0}');
+let notes=JSON.parse(localStorage.getItem("c8notes")||"[]");
+let wrong=JSON.parse(localStorage.getItem("c8wrong")||"[]");
+const $=id=>document.getElementById(id);
+
+$("subjectList").innerHTML=Object.keys(data).map(s=>`<div class="subject"><b>${s}</b><br><button onclick="showChapters('${s}')">Open</button></div>`).join("");
+
+function show(id){document.querySelectorAll("main section").forEach(x=>x.classList.add("hidden"));$(id).classList.remove("hidden");if(id==="progressPage")updateProgress();if(id==="notesPage")renderNotes();if(id==="wrongPage")renderWrong();}
+function showChapters(s){currentSubject=s;let a=Object.keys(data[s]);$("chapterTitle").textContent="📖 "+s;$("chapterCount").textContent=a.length+" chapters";$("chapterList").innerHTML=a.map(c=>`<div class="chapter"><b>${c}</b><button onclick="startQuiz('${s}','${c}')">Quiz</button></div>`).join("");show("chapters")}
+function startQuiz(s,c){currentSubject=s;currentChapter=c;quiz=data[s][c];qi=0;score=0;show("quiz");load()}
+function load(){let q=quiz[qi];$("quizTitle").textContent=currentSubject+" • "+currentChapter;$("question").textContent=q[0];$("progressText").textContent=`Question ${qi+1} of ${quiz.length}`;$("options").innerHTML=q[1].map((o,i)=>`<button class="option" onclick="answer(${i})">${o}</button>`).join("")}
+function answer(i){let q=quiz[qi];stats.answered++;if(i===q[2])score++;else wrong.push({subject:currentSubject,chapter:currentChapter,q:q[0],answer:q[1][q[2]]});if(i===q[2])stats.correct++;qi++;if(qi<quiz.length)load();else{stats.completed++;let d=new Date().toISOString().slice(0,10);if(stats.last!==d){let y=new Date(Date.now()-86400000).toISOString().slice(0,10);stats.streak=stats.last===y?stats.streak+1:1;stats.last=d}localStorage.setItem("c8stats",JSON.stringify(stats));localStorage.setItem("c8wrong",JSON.stringify(wrong));show("result");$("score").textContent=score+"/"+quiz.length;$("resultText").textContent=score===quiz.length?"Perfect! 🌟":score>=quiz.length/2?"Good work! 💪":"Keep practicing! 📚"}}
+function quickQuiz(){let ss=Object.keys(data),s=ss[Math.floor(Math.random()*ss.length)],cc=Object.keys(data[s]),c=cc[Math.floor(Math.random()*cc.length)];startQuiz(s,c)}
+function updateProgress(){$("completed").textContent=stats.completed;$("answered").textContent=stats.answered;$("correct").textContent=stats.correct;$("accuracy").textContent=stats.answered?Math.round(stats.correct/stats.answered*100)+"%":"0%";$("studyTime").textContent=stats.study+" min";$("streak").textContent=stats.streak+" days"}
+let seconds=1500,timer=null;function updateTimer(){$("timer").textContent=String(Math.floor(seconds/60)).padStart(2,"0")+":"+String(seconds%60).padStart(2,"0")}
+function startTimer(){if(timer)return;timer=setInterval(()=>{if(seconds){seconds--;if(seconds%60===0){stats.study++;localStorage.setItem("c8stats",JSON.stringify(stats))}updateTimer()}else{pauseTimer();alert("Study session complete! 🎉")}},1000)}
+function pauseTimer(){clearInterval(timer);timer=null}function resetTimer(){pauseTimer();seconds=1500;updateTimer()}
+function saveNote(){let t=$("noteTitle").value.trim()||"Untitled Note",v=$("noteText").value.trim();if(!v)return;notes.unshift({id:Date.now(),title:t,text:v,date:new Date().toLocaleDateString()});localStorage.setItem("c8notes",JSON.stringify(notes));$("noteTitle").value="";$("noteText").value="";renderNotes()}
+function renderNotes(){$("notesList").innerHTML=notes.length?notes.map(n=>`<div class="note"><b>${n.title}</b><div class="small">${n.date}</div><p>${escapeHtml(n.text)}</p><button class="secondary" onclick="deleteNote(${n.id})">Delete</button></div>`).join(""):"<p class='small'>No saved notes yet.</p>"}
+function deleteNote(id){notes=notes.filter(n=>n.id!==id);localStorage.setItem("c8notes",JSON.stringify(notes));renderNotes()}
+function renderWrong(){$("wrongList").innerHTML=wrong.length?wrong.slice().reverse().map(w=>`<div class="note"><b>${w.subject} • ${w.chapter}</b><p>${escapeHtml(w.q)}</p><p>Answer: <b>${escapeHtml(w.answer)}</b></p></div>`).join(""):"<p>No wrong answers saved. 🎉</p>"}
+function clearWrong(){wrong=[];localStorage.setItem("c8wrong","[]");renderWrong()}
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+function toggleDark(){document.body.style.background=document.body.style.background===""?"#101827":"";document.body.style.color=document.body.style.color===""?"#eef2ff":""}
+let deferredPrompt=null;window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e});
+async function installApp(){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt=null}else alert("Chrome can install this app when it is opened from an HTTPS website. A downloaded HTML file cannot provide the Home Screen install option by itself.")}
+if("serviceWorker" in navigator && location.protocol.startsWith("http"))navigator.serviceWorker.register("sw.js");
+</script>
+</body>
+</html>
